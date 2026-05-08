@@ -2,7 +2,7 @@ import styled from "styled-components";
 
 export const Container = styled.section`
   width: 100%;
-  min-height: 420px;
+  min-height: 560px;
 
   border-radius: 24px;
 
@@ -16,7 +16,7 @@ export const Container = styled.section`
 
   border: 1px solid rgba(255, 255, 255, 0.04);
 
-  padding: 42px;
+  padding: 42px 42px 160px;
 
   display: flex;
   align-items: center;
@@ -46,7 +46,7 @@ export const Content = styled.div`
   h1 {
     color: #ef4444;
 
-    font-size: 44px;
+    font-size: clamp(36px, 4vw, 58px);
     font-weight: 900;
 
     margin-top: 8px;
@@ -55,7 +55,7 @@ export const Content = styled.div`
   }
 
   p {
-    color: #94a3b8;
+    color: #ffffff;
 
     font-size: 18px;
 
@@ -123,10 +123,10 @@ export const Image = styled.div`
   height: 100%;
 
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: flex-end;
 
-  overflow: hidden;
+  z-index: 1;
 
   img {
     width: 100%;
@@ -134,6 +134,106 @@ export const Image = styled.div`
 
     object-fit: cover;
 
-    opacity: 0.95;
+    object-position: right bottom;
+  }
+`;
+
+export const Features = styled.div`
+  position: absolute;
+
+  left: 32px;
+  right: 32px;
+  bottom: 32px;
+
+  height: 92px;
+
+  border-radius: 18px;
+
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.06),
+    rgba(255, 255, 255, 0.02)
+  );
+
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.35);
+
+  border: 1px solid rgba(255, 255, 255, 0.04);
+
+  backdrop-filter: blur(12px);
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  overflow: hidden;
+
+  z-index: 5;
+
+  @media (max-width: 1200px) {
+    grid-template-columns: repeat(2, 1fr);
+
+    height: auto;
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
+export const FeatureCard = styled.div`
+  display: flex;
+  align-items: center;
+
+  gap: 16px;
+
+  padding: 0 24px;
+
+  border-right: 1px solid rgba(255, 255, 255, 0.04);
+
+  .icon {
+    width: 44px;
+    height: 44px;
+
+    border-radius: 50%;
+
+    background: rgba(239, 68, 68, 0.12);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    color: #ef4444;
+
+    font-size: 18px;
+
+    flex-shrink: 0;
+  }
+
+  strong {
+    display: block;
+
+    color: white;
+
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  span {
+    color: #ffffff;
+
+    font-size: 13px;
+
+    margin-top: 4px;
+
+    display: block;
+  }
+
+  &:last-child {
+    border-right: 0;
+  }
+
+  @media (max-width: 1200px) {
+    height: 92px;
+
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
   }
 `;

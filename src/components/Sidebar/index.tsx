@@ -1,9 +1,5 @@
 import * as S from "./styles";
 
-import { useEffect, useState } from "react";
-
-import { api } from "../../services/api";
-
 import {
   FiHome,
   FiTruck,
@@ -15,66 +11,116 @@ import {
   FiPlusCircle,
 } from "react-icons/fi";
 
+import { useEffect, useState } from "react";
+
+import { useNavigate, useLocation } from "react-router-dom";
+
+import { api } from "../../services/api";
+
 import logo from "../../assets/logo.png";
 
 interface Category {
   name: string;
+
   total: number;
 }
 
 export function Sidebar() {
+  const navigate = useNavigate();
+
+  const location = useLocation();
+
+  // 📂 categorias
   const [categories, setCategories] = useState<Category[]>([]);
 
+  // 🚘 marcas
+  const [brands, setBrands] = useState<string[]>([]);
+
+  // 🚗 modelos
+  const [models, setModels] = useState<string[]>([]);
+
+  // 🔍 filtros
   const [brand, setBrand] = useState("");
+
   const [model, setModel] = useState("");
 
   const [minPrice, setMinPrice] = useState("");
+
   const [maxPrice, setMaxPrice] = useState("");
 
   const [minYear, setMinYear] = useState("");
+
   const [maxYear, setMaxYear] = useState("");
 
+  // 🚀 carregar dados
   useEffect(() => {
-    async function loadCategories() {
+    async function loadData() {
       try {
-        const response = await api.get("/cars/categories");
+        const [categoriesResponse, brandsResponse, modelsResponse] =
+          await Promise.all([
+            api.get("/cars/categories"),
 
-        setCategories(response.data);
+            api.get("/cars/brands"),
+
+            api.get("/cars/models"),
+          ]);
+
+        setCategories(categoriesResponse.data);
+
+        setBrands(brandsResponse.data);
+
+        setModels(modelsResponse.data);
       } catch (error) {
         console.error(error);
       }
     }
 
-    loadCategories();
+    loadData();
   }, []);
 
-  async function handleFilter() {
-    try {
-      const response = await api.get("/cars", {
-        params: {
-          brand,
-          model,
-          minPrice,
-          maxPrice,
-          minYear,
-          maxYear,
-        },
-      });
+  // 🔍 aplicar filtros
+  function handleFilter() {
+    const params = new URLSearchParams();
 
-      console.log(response.data);
-    } catch (error) {
-      console.error(error);
+    if (brand) {
+      params.append("brand", brand);
     }
+
+    if (model) {
+      params.append("model", model);
+    }
+
+    if (minPrice) {
+      params.append("minPrice", minPrice);
+    }
+
+    if (maxPrice) {
+      params.append("maxPrice", maxPrice);
+    }
+
+    if (minYear) {
+      params.append("minYear", minYear);
+    }
+
+    if (maxYear) {
+      params.append("maxYear", maxYear);
+    }
+
+    navigate(`/cars?${params.toString()}`);
   }
 
+  // 🧹 limpar filtros
   function handleClearFilters() {
     setBrand("");
+
     setModel("");
 
     setMinPrice("");
+
     setMaxPrice("");
 
     setMinYear("");
+
     setMaxYear("");
   }
 
@@ -87,13 +133,17 @@ export function Sidebar() {
       <S.SectionTitle>NAVEGAÇÃO</S.SectionTitle>
 
       <S.Menu>
-        <S.MenuItem active={true}>
+        <S.MenuItem
+          active={location.pathname === "/"}
+          onClick={() => navigate("/")}>
           <FiHome />
 
           <span>Início</span>
         </S.MenuItem>
 
-        <S.MenuItem>
+        <S.MenuItem
+          active={location.pathname === "/cars"}
+          onClick={() => navigate("/cars")}>
           <FiTruck />
 
           <span>Carros</span>
@@ -142,7 +192,9 @@ export function Sidebar() {
 
       <S.CategoryList>
         {categories.slice(0, 6).map((category) => (
-          <S.CategoryItem key={category.name}>
+          <S.CategoryItem
+            key={category.name}
+            onClick={() => navigate(`/cars?category=${category.name}`)}>
             <span>{category.name}</span>
 
             <strong>{category.total}</strong>
@@ -155,87 +207,95 @@ export function Sidebar() {
       <S.SectionTitle>FILTROS RÁPIDOS</S.SectionTitle>
 
       <S.Filters>
-        <S.Select value={brand} onChange={(e) => setBrand(e.target.value)}>
-          <option value="">Todas as marcas</option>
+        {/* 🚘 Marca */}
+        <S.FilterGroup>
+          <S.Label>Marca</S.Label>
 
-          <option value="BMW">BMW</option>
+          <S.Select value={brand} onChange={(e) => setBrand(e.target.value)}>
+            <option value="">Selecione a marca</option>
 
-          <option value="Toyota">Toyota</option>
+            {brands.map((brand) => (
+              <option key={brand} value={brand}>
+                {brand}
+              </option>
+            ))}
+          </S.Select>
+        </S.FilterGroup>
 
-          <option value="Honda">Honda</option>
+        {/* 🚗 Modelo */}
+        <S.FilterGroup>
+          <S.Label>Modelo</S.Label>
 
-          <option value="Jeep">Jeep</option>
-        </S.Select>
+          <S.Select value={model} onChange={(e) => setModel(e.target.value)}>
+            <option value="">Selecione o modelo</option>
 
-        <S.Select value={model} onChange={(e) => setModel(e.target.value)}>
-          <option value="">Todos os modelos</option>
+            {models.map((model) => (
+              <option key={model} value={model}>
+                {model}
+              </option>
+            ))}
+          </S.Select>
+        </S.FilterGroup>
 
-          <option value="320i">320i</option>
-
-          <option value="Corolla">Corolla</option>
-
-          <option value="Civic">Civic</option>
-
-          <option value="Compass">Compass</option>
-        </S.Select>
-
+        {/* 💰 preço */}
         <S.Grid>
-          <S.Select
-            value={minPrice}
-            onChange={(e) => setMinPrice(e.target.value)}>
-            <option value="">Preço mínimo</option>
+          <S.FilterGroup>
+            <S.Label>Preço mínimo</S.Label>
 
-            <option value="50000">50 mil</option>
+            <S.Input
+              type="number"
+              placeholder="R$ 0"
+              value={minPrice}
+              onChange={(e) => setMinPrice(e.target.value)}
+            />
+          </S.FilterGroup>
 
-            <option value="100000">100 mil</option>
+          <S.FilterGroup>
+            <S.Label>Preço máximo</S.Label>
 
-            <option value="200000">200 mil</option>
-          </S.Select>
-
-          <S.Select
-            value={maxPrice}
-            onChange={(e) => setMaxPrice(e.target.value)}>
-            <option value="">Preço máximo</option>
-
-            <option value="100000">100 mil</option>
-
-            <option value="200000">200 mil</option>
-
-            <option value="500000">500 mil</option>
-          </S.Select>
+            <S.Input
+              type="number"
+              placeholder="R$ 500.000"
+              value={maxPrice}
+              onChange={(e) => setMaxPrice(e.target.value)}
+            />
+          </S.FilterGroup>
         </S.Grid>
 
+        {/* 📅 ano */}
         <S.Grid>
-          <S.Select
-            value={minYear}
-            onChange={(e) => setMinYear(e.target.value)}>
-            <option value="">Ano mínimo</option>
+          <S.FilterGroup>
+            <S.Label>Ano mínimo</S.Label>
 
-            <option value="2020">2020</option>
+            <S.Input
+              type="number"
+              placeholder="2015"
+              value={minYear}
+              onChange={(e) => setMinYear(e.target.value)}
+            />
+          </S.FilterGroup>
 
-            <option value="2021">2021</option>
+          <S.FilterGroup>
+            <S.Label>Ano máximo</S.Label>
 
-            <option value="2022">2022</option>
-          </S.Select>
-
-          <S.Select
-            value={maxYear}
-            onChange={(e) => setMaxYear(e.target.value)}>
-            <option value="">Ano máximo</option>
-
-            <option value="2022">2022</option>
-
-            <option value="2023">2023</option>
-
-            <option value="2024">2024</option>
-          </S.Select>
+            <S.Input
+              type="number"
+              placeholder="2025"
+              value={maxYear}
+              onChange={(e) => setMaxYear(e.target.value)}
+            />
+          </S.FilterGroup>
         </S.Grid>
 
-        <S.PrimaryButton onClick={handleFilter}>VER CARROS</S.PrimaryButton>
+        <S.ButtonGroup>
+          <S.PrimaryButton type="button" onClick={handleFilter}>
+            VER CARROS
+          </S.PrimaryButton>
 
-        <S.SecondaryButton onClick={handleClearFilters}>
-          LIMPAR FILTROS
-        </S.SecondaryButton>
+          <S.SecondaryButton type="button" onClick={handleClearFilters}>
+            LIMPAR
+          </S.SecondaryButton>
+        </S.ButtonGroup>
       </S.Filters>
     </S.Container>
   );

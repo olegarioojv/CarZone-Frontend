@@ -6,6 +6,7 @@ interface MenuItemProps {
 
 export const Container = styled.aside`
   width: 320px;
+
   min-height: 100vh;
 
   background: #060b16;
@@ -16,13 +17,36 @@ export const Container = styled.aside`
 
   display: flex;
   flex-direction: column;
+
+  position: sticky;
+
+  top: 0;
+
+  overflow-y: auto;
+
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (max-width: 1200px) {
+    width: 280px;
+  }
+
+  @media (max-width: 992px) {
+    display: none;
+  }
 `;
 
 export const Logo = styled.div`
   width: 100%;
 
+  margin-bottom: 26px;
+
   img {
-    width: 210px;
+    width: 180px;
+
     object-fit: contain;
   }
 `;
@@ -30,10 +54,10 @@ export const Logo = styled.div`
 export const SectionTitle = styled.h2`
   color: #64748b;
 
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 700;
 
-  letter-spacing: 0.5px;
+  letter-spacing: 1px;
 
   margin-bottom: 14px;
 `;
@@ -47,17 +71,14 @@ export const Menu = styled.div`
 
 export const MenuItem = styled.button<MenuItemProps>`
   width: 100%;
-  height: 46px;
+
+  height: 48px;
 
   border-radius: 14px;
 
   border: 1px solid transparent;
 
   background: transparent;
-
-  outline: none;
-
-  box-shadow: none;
 
   display: flex;
   align-items: center;
@@ -70,10 +91,9 @@ export const MenuItem = styled.button<MenuItemProps>`
 
   cursor: pointer;
 
-  transition:
-    background 0.2s,
-    color 0.2s,
-    border 0.2s;
+  transition: 0.25s;
+
+  outline: none;
 
   svg {
     font-size: 18px;
@@ -87,17 +107,11 @@ export const MenuItem = styled.button<MenuItemProps>`
   }
 
   &:hover {
-    background: rgba(239, 68, 68, 0.12);
+    background: rgba(239, 68, 68, 0.08);
 
-    border: 1px solid rgba(239, 68, 68, 0.12);
+    border-color: rgba(239, 68, 68, 0.16);
 
     color: white;
-  }
-
-  &:focus {
-    outline: none;
-
-    box-shadow: none;
   }
 
   ${({ active }) =>
@@ -105,11 +119,11 @@ export const MenuItem = styled.button<MenuItemProps>`
     css`
       background: linear-gradient(
         90deg,
-        rgba(239, 68, 68, 0.22) 0%,
-        rgba(239, 68, 68, 0.05) 100%
+        rgba(239, 68, 68, 0.2) 0%,
+        rgba(239, 68, 68, 0.04) 100%
       );
 
-      border: 1px solid rgba(239, 68, 68, 0.2);
+      border-color: rgba(239, 68, 68, 0.22);
 
       color: white;
     `}
@@ -117,6 +131,7 @@ export const MenuItem = styled.button<MenuItemProps>`
 
 export const Divider = styled.div`
   width: 100%;
+
   height: 1px;
 
   background: rgba(255, 255, 255, 0.06);
@@ -131,28 +146,42 @@ export const CategoryList = styled.div`
   gap: 14px;
 `;
 
-export const CategoryItem = styled.div`
+export const CategoryItem = styled.button`
+  width: 100%;
+
+  border: 0;
+
+  background: transparent;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
 
+  cursor: pointer;
+
+  transition: 0.2s;
+
   color: #cbd5e1;
 
-  padding: 2px 0;
+  &:hover {
+    color: white;
+  }
 
   span {
-    font-size: 15px;
+    font-size: 14px;
   }
 
   strong {
     color: #64748b;
-    font-size: 14px;
-    font-weight: 500;
+
+    font-size: 13px;
+    font-weight: 600;
   }
 `;
 
 export const Badge = styled.div`
   min-width: 20px;
+
   height: 20px;
 
   border-radius: 999px;
@@ -172,8 +201,6 @@ export const Badge = styled.div`
 `;
 
 export const Filters = styled.div`
-  margin-top: 28px;
-
   display: flex;
   flex-direction: column;
 
@@ -182,9 +209,10 @@ export const Filters = styled.div`
 
 export const Select = styled.select`
   width: 100%;
-  height: 44px;
 
-  border-radius: 10px;
+  height: 46px;
+
+  border-radius: 12px;
 
   border: 1px solid rgba(255, 255, 255, 0.06);
 
@@ -197,6 +225,44 @@ export const Select = styled.select`
   outline: none;
 
   font-size: 13px;
+
+  transition: 0.2s;
+
+  cursor: pointer;
+
+  &:focus {
+    border-color: rgba(239, 68, 68, 0.35);
+  }
+`;
+
+export const Input = styled.input`
+  width: 100%;
+
+  height: 46px;
+
+  border-radius: 12px;
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  background: #0f172a;
+
+  color: white;
+
+  padding: 0 14px;
+
+  outline: none;
+
+  font-size: 13px;
+
+  transition: 0.2s;
+
+  &::placeholder {
+    color: #64748b;
+  }
+
+  &:focus {
+    border-color: rgba(239, 68, 68, 0.35);
+  }
 `;
 
 export const Grid = styled.div`
@@ -209,11 +275,12 @@ export const Grid = styled.div`
 
 export const PrimaryButton = styled.button`
   width: 100%;
-  height: 46px;
 
-  border-radius: 12px;
+  height: 48px;
 
-  border: none;
+  border-radius: 14px;
+
+  border: 0;
 
   background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
 
@@ -222,20 +289,25 @@ export const PrimaryButton = styled.button`
   font-size: 13px;
   font-weight: 700;
 
+  cursor: pointer;
+
+  transition: 0.25s;
+
   margin-top: 6px;
 
-  transition: 0.2s;
-
   &:hover {
-    opacity: 0.9;
+    transform: translateY(-2px);
+
+    opacity: 0.95;
   }
 `;
 
 export const SecondaryButton = styled.button`
   width: 100%;
-  height: 50px;
 
-  border-radius: 12px;
+  height: 48px;
+
+  border-radius: 14px;
 
   border: 1px solid rgba(255, 255, 255, 0.06);
 
@@ -243,12 +315,39 @@ export const SecondaryButton = styled.button`
 
   color: white;
 
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 700;
 
-  transition: 0.2s;
+  cursor: pointer;
+
+  transition: 0.25s;
 
   &:hover {
     background: #131c31;
   }
+`;
+
+export const FilterGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+`;
+
+export const Label = styled.label`
+  color: #94a3b8;
+
+  font-size: 12px;
+  font-weight: 600;
+
+  padding-left: 2px;
+`;
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  flex-direction: column;
+
+  gap: 10px;
+
+  margin-top: 8px;
 `;
