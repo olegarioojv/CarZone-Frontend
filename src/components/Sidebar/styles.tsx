@@ -42,10 +42,14 @@ export const Container = styled.aside`
 export const Logo = styled.div`
   width: 100%;
 
-  margin-bottom: 26px;
+  margin-bottom: 28px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
 
   img {
-    width: 180px;
+    width: 190px;
 
     object-fit: contain;
   }
@@ -54,12 +58,14 @@ export const Logo = styled.div`
 export const SectionTitle = styled.h2`
   color: #64748b;
 
-  font-size: 12px;
+  font-size: 11px;
   font-weight: 700;
 
-  letter-spacing: 1px;
+  letter-spacing: 1.2px;
 
   margin-bottom: 14px;
+
+  text-transform: uppercase;
 `;
 
 export const Menu = styled.div`
@@ -72,9 +78,9 @@ export const Menu = styled.div`
 export const MenuItem = styled.button<MenuItemProps>`
   width: 100%;
 
-  height: 48px;
+  height: 50px;
 
-  border-radius: 14px;
+  border-radius: 16px;
 
   border: 1px solid transparent;
 
@@ -83,15 +89,15 @@ export const MenuItem = styled.button<MenuItemProps>`
   display: flex;
   align-items: center;
 
-  gap: 12px;
+  gap: 14px;
 
-  padding: 0 14px;
+  padding: 0 16px;
 
   color: #cbd5e1;
 
   cursor: pointer;
 
-  transition: 0.25s;
+  transition: all 0.25s ease;
 
   outline: none;
 
@@ -99,6 +105,8 @@ export const MenuItem = styled.button<MenuItemProps>`
     font-size: 18px;
 
     min-width: 18px;
+
+    transition: 0.2s;
   }
 
   span {
@@ -109,9 +117,15 @@ export const MenuItem = styled.button<MenuItemProps>`
   &:hover {
     background: rgba(239, 68, 68, 0.08);
 
-    border-color: rgba(239, 68, 68, 0.16);
+    border-color: rgba(239, 68, 68, 0.14);
 
     color: white;
+
+    transform: translateX(2px);
+
+    svg {
+      color: #ef4444;
+    }
   }
 
   ${({ active }) =>
@@ -119,13 +133,19 @@ export const MenuItem = styled.button<MenuItemProps>`
     css`
       background: linear-gradient(
         90deg,
-        rgba(239, 68, 68, 0.2) 0%,
+        rgba(239, 68, 68, 0.22) 0%,
         rgba(239, 68, 68, 0.04) 100%
       );
 
-      border-color: rgba(239, 68, 68, 0.22);
+      border-color: rgba(239, 68, 68, 0.2);
 
       color: white;
+
+      box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.08);
+
+      svg {
+        color: #ef4444;
+      }
     `}
 `;
 
@@ -134,22 +154,26 @@ export const Divider = styled.div`
 
   height: 1px;
 
-  background: rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.05);
 
-  margin: 28px 0;
+  margin: 30px 0;
 `;
 
 export const CategoryList = styled.div`
   display: flex;
   flex-direction: column;
 
-  gap: 14px;
+  gap: 12px;
 `;
 
 export const CategoryItem = styled.button`
   width: 100%;
 
-  border: 0;
+  height: 42px;
+
+  border: 1px solid transparent;
+
+  border-radius: 12px;
 
   background: transparent;
 
@@ -157,25 +181,33 @@ export const CategoryItem = styled.button`
   align-items: center;
   justify-content: space-between;
 
+  padding: 0 12px;
+
   cursor: pointer;
 
-  transition: 0.2s;
+  transition: all 0.2s ease;
 
   color: #cbd5e1;
 
   &:hover {
+    background: rgba(255, 255, 255, 0.03);
+
+    border-color: rgba(255, 255, 255, 0.04);
+
     color: white;
   }
 
   span {
     font-size: 14px;
+
+    font-weight: 500;
   }
 
   strong {
     color: #64748b;
 
-    font-size: 13px;
-    font-weight: 600;
+    font-size: 12px;
+    font-weight: 700;
   }
 `;
 
@@ -204,127 +236,7 @@ export const Filters = styled.div`
   display: flex;
   flex-direction: column;
 
-  gap: 12px;
-`;
-
-export const Select = styled.select`
-  width: 100%;
-
-  height: 46px;
-
-  border-radius: 12px;
-
-  border: 1px solid rgba(255, 255, 255, 0.06);
-
-  background: #0f172a;
-
-  color: white;
-
-  padding: 0 14px;
-
-  outline: none;
-
-  font-size: 13px;
-
-  transition: 0.2s;
-
-  cursor: pointer;
-
-  &:focus {
-    border-color: rgba(239, 68, 68, 0.35);
-  }
-`;
-
-export const Input = styled.input`
-  width: 100%;
-
-  height: 46px;
-
-  border-radius: 12px;
-
-  border: 1px solid rgba(255, 255, 255, 0.06);
-
-  background: #0f172a;
-
-  color: white;
-
-  padding: 0 14px;
-
-  outline: none;
-
-  font-size: 13px;
-
-  transition: 0.2s;
-
-  &::placeholder {
-    color: #64748b;
-  }
-
-  &:focus {
-    border-color: rgba(239, 68, 68, 0.35);
-  }
-`;
-
-export const Grid = styled.div`
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 10px;
-`;
-
-export const PrimaryButton = styled.button`
-  width: 100%;
-
-  height: 48px;
-
-  border-radius: 14px;
-
-  border: 0;
-
-  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
-
-  color: white;
-
-  font-size: 13px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition: 0.25s;
-
-  margin-top: 6px;
-
-  &:hover {
-    transform: translateY(-2px);
-
-    opacity: 0.95;
-  }
-`;
-
-export const SecondaryButton = styled.button`
-  width: 100%;
-
-  height: 48px;
-
-  border-radius: 14px;
-
-  border: 1px solid rgba(255, 255, 255, 0.06);
-
-  background: #0f172a;
-
-  color: white;
-
-  font-size: 13px;
-  font-weight: 700;
-
-  cursor: pointer;
-
-  transition: 0.25s;
-
-  &:hover {
-    background: #131c31;
-  }
+  gap: 14px;
 `;
 
 export const FilterGroup = styled.div`
@@ -343,11 +255,139 @@ export const Label = styled.label`
   padding-left: 2px;
 `;
 
+export const Select = styled.select`
+  width: 100%;
+
+  height: 48px;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  background: #0f172a;
+
+  color: white;
+
+  padding: 0 14px;
+
+  outline: none;
+
+  font-size: 13px;
+
+  transition: all 0.2s ease;
+
+  cursor: pointer;
+
+  appearance: none;
+
+  &:focus {
+    border-color: rgba(239, 68, 68, 0.4);
+
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.08);
+  }
+`;
+
+export const Input = styled.input`
+  width: 100%;
+
+  height: 48px;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  background: #0f172a;
+
+  color: white;
+
+  padding: 0 14px;
+
+  outline: none;
+
+  font-size: 13px;
+
+  transition: all 0.2s ease;
+
+  &::placeholder {
+    color: #64748b;
+  }
+
+  &:focus {
+    border-color: rgba(239, 68, 68, 0.4);
+
+    box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.08);
+  }
+`;
+
+export const Grid = styled.div`
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+`;
+
 export const ButtonGroup = styled.div`
   display: flex;
   flex-direction: column;
 
   gap: 10px;
 
-  margin-top: 8px;
+  margin-top: 6px;
+`;
+
+export const PrimaryButton = styled.button`
+  width: 100%;
+
+  height: 50px;
+
+  border-radius: 14px;
+
+  border: 0;
+
+  background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+
+  color: white;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+
+  &:hover {
+    transform: translateY(-2px);
+
+    opacity: 0.95;
+
+    box-shadow: 0 12px 30px rgba(239, 68, 68, 0.2);
+  }
+`;
+
+export const SecondaryButton = styled.button`
+  width: 100%;
+
+  height: 50px;
+
+  border-radius: 14px;
+
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  background: #0f172a;
+
+  color: white;
+
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.25s ease;
+
+  &:hover {
+    background: #131c31;
+
+    border-color: rgba(255, 255, 255, 0.1);
+  }
 `;

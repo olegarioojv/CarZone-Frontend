@@ -4,13 +4,13 @@ import { useEffect, useState } from "react";
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import Navbar from "../../components/Navbar";
+import { FiHeart } from "react-icons/fi";
 
+import Navbar from "../../components/Navbar";
 import Sidebar from "../../components/Sidebar";
+import Footer from "../../components/Footer";
 
 import { api } from "../../services/api";
-
-import { FiHeart } from "react-icons/fi";
 
 interface CarImage {
   id: string;
@@ -59,13 +59,13 @@ export function Cars() {
 
   const [total, setTotal] = useState(0);
 
+  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
+
   const [lastPage, setLastPage] = useState(1);
 
   const [sort, setSort] = useState(searchParams.get("sort") || "recent");
 
-  const [page, setPage] = useState(Number(searchParams.get("page")) || 1);
-
-  // 🔍 filtros URL
+  // 🔍 filtros
   const brand = searchParams.get("brand");
 
   const model = searchParams.get("model");
@@ -82,7 +82,7 @@ export function Cars() {
 
   const search = searchParams.get("search");
 
-  // 🚀 buscar carros
+  // 🚘 buscar carros
   useEffect(() => {
     async function fetchCars() {
       try {
@@ -110,7 +110,7 @@ export function Cars() {
 
         setLastPage(response.data.lastPage);
       } catch (error) {
-        console.error(error);
+        console.error("Erro ao buscar carros:", error);
       } finally {
         setLoading(false);
       }
@@ -130,7 +130,7 @@ export function Cars() {
     page,
   ]);
 
-  // 🔥 remover filtro
+  // ❌ remover filtro
   function removeFilter(key: string) {
     const params = new URLSearchParams(searchParams);
 
@@ -158,7 +158,7 @@ export function Cars() {
     setPage(1);
   }
 
-  // 🔥 paginação
+  // 📄 paginação
   function handlePageChange(newPage: number) {
     setPage(newPage);
 
@@ -176,131 +176,141 @@ export function Cars() {
 
   return (
     <S.Container>
-      <Sidebar />
+      <S.PageContent>
+        <Sidebar />
 
-      <S.Content>
-        <Navbar />
+        <S.Content>
+          <Navbar />
 
-        <S.Main>
-          {/* 🔥 header */}
-          <S.Header>
-            <div>
-              <h1>Carros à venda</h1>
+          <S.Main>
+            {/* 🔥 HEADER */}
+            <S.Header>
+              <div>
+                <h1>Carros à venda</h1>
 
-              <span>
-                Encontramos <strong>{total}</strong> carros
-              </span>
-            </div>
+                <span>
+                  Encontramos <strong>{total}</strong> carros
+                </span>
+              </div>
 
-            <S.Actions>
-              <select value={sort} onChange={(e) => handleSort(e.target.value)}>
-                <option value="recent">Mais recentes</option>
+              <S.Actions>
+                <select
+                  value={sort}
+                  onChange={(e) => handleSort(e.target.value)}>
+                  <option value="recent">Mais recentes</option>
 
-                <option value="price_asc">Menor preço</option>
+                  <option value="price_asc">Menor preço</option>
 
-                <option value="price_desc">Maior preço</option>
-              </select>
-            </S.Actions>
-          </S.Header>
+                  <option value="price_desc">Maior preço</option>
+                </select>
+              </S.Actions>
+            </S.Header>
 
-          {/* 🔍 filtros ativos */}
-          <S.FiltersRow>
-            {brand && (
-              <button onClick={() => removeFilter("brand")}>{brand} ✕</button>
-            )}
+            {/* 🔍 FILTROS */}
+            <S.FiltersRow>
+              {brand && (
+                <button onClick={() => removeFilter("brand")}>{brand} ✕</button>
+              )}
 
-            {model && (
-              <button onClick={() => removeFilter("model")}>{model} ✕</button>
-            )}
+              {model && (
+                <button onClick={() => removeFilter("model")}>{model} ✕</button>
+              )}
 
-            {category && (
-              <button onClick={() => removeFilter("category")}>
-                {category} ✕
-              </button>
-            )}
-
-            {maxPrice && (
-              <button onClick={() => removeFilter("maxPrice")}>
-                Até R$ {Number(maxPrice).toLocaleString("pt-BR")} ✕
-              </button>
-            )}
-
-            {minYear && (
-              <button onClick={() => removeFilter("minYear")}>
-                A partir de {minYear} ✕
-              </button>
-            )}
-          </S.FiltersRow>
-
-          {/* 🚘 carros */}
-          {loading ? (
-            <S.Loading>Carregando carros...</S.Loading>
-          ) : (
-            <>
-              <S.CarsGrid>
-                {cars.map((car) => (
-                  <S.Card
-                    key={car.id}
-                    onClick={() => navigate(`/cars/${car.id}`)}>
-                    <S.Image>
-                      <img src={car.images?.[0]?.url} alt={car.title} />
-
-                      <button type="button">
-                        <FiHeart />
-                      </button>
-                    </S.Image>
-
-                    <S.Info>
-                      <strong>
-                        {car.brand} {car.model}
-                      </strong>
-
-                      <span>
-                        {car.year} • {car.category}
-                      </span>
-
-                      <S.Footer>
-                        <h3>R$ {Number(car.price).toLocaleString("pt-BR")}</h3>
-
-                        <small>{car.km.toLocaleString("pt-BR")} km</small>
-                      </S.Footer>
-                    </S.Info>
-                  </S.Card>
-                ))}
-              </S.CarsGrid>
-
-              {/* 🔥 paginação */}
-              <S.Pagination>
-                <button
-                  disabled={page === 1}
-                  onClick={() => handlePageChange(page - 1)}>
-                  Anterior
+              {category && (
+                <button onClick={() => removeFilter("category")}>
+                  {category} ✕
                 </button>
+              )}
 
-                {Array.from(
-                  {
-                    length: lastPage,
-                  },
-                  (_, index) => (
+              {maxPrice && (
+                <button onClick={() => removeFilter("maxPrice")}>
+                  Até R$ {Number(maxPrice).toLocaleString("pt-BR")} ✕
+                </button>
+              )}
+
+              {minYear && (
+                <button onClick={() => removeFilter("minYear")}>
+                  A partir de {minYear} ✕
+                </button>
+              )}
+            </S.FiltersRow>
+
+            {/* 🚘 GRID */}
+            {loading ? (
+              <S.Loading>Carregando carros...</S.Loading>
+            ) : (
+              <>
+                <S.CarsGrid>
+                  {cars.map((car) => (
+                    <S.Card
+                      key={car.id}
+                      onClick={() => navigate(`/cars/${car.id}`)}>
+                      <S.Image>
+                        <img
+                          src={
+                            car.images?.[0]?.url ||
+                            "https://placehold.co/600x400"
+                          }
+                          alt={car.title}
+                        />
+
+                        <button
+                          type="button"
+                          onClick={(e) => e.stopPropagation()}>
+                          <FiHeart />
+                        </button>
+                      </S.Image>
+
+                      <S.Info>
+                        <strong>
+                          {car.brand} {car.model}
+                        </strong>
+
+                        <span>
+                          {car.year} • {car.category}
+                        </span>
+
+                        <S.Footer>
+                          <h3>
+                            R$ {Number(car.price).toLocaleString("pt-BR")}
+                          </h3>
+
+                          <small>{car.km.toLocaleString("pt-BR")} km</small>
+                        </S.Footer>
+                      </S.Info>
+                    </S.Card>
+                  ))}
+                </S.CarsGrid>
+
+                {/* 📄 PAGINAÇÃO */}
+                <S.Pagination>
+                  <button
+                    disabled={page === 1}
+                    onClick={() => handlePageChange(page - 1)}>
+                    Anterior
+                  </button>
+
+                  {Array.from({ length: lastPage }, (_, index) => (
                     <button
                       key={index}
                       className={page === index + 1 ? "active" : ""}
                       onClick={() => handlePageChange(index + 1)}>
                       {index + 1}
                     </button>
-                  ),
-                )}
+                  ))}
 
-                <button
-                  disabled={page === lastPage}
-                  onClick={() => handlePageChange(page + 1)}>
-                  Próxima
-                </button>
-              </S.Pagination>
-            </>
-          )}
-        </S.Main>
-      </S.Content>
+                  <button
+                    disabled={page === lastPage}
+                    onClick={() => handlePageChange(page + 1)}>
+                    Próxima
+                  </button>
+                </S.Pagination>
+              </>
+            )}
+          </S.Main>
+        </S.Content>
+      </S.PageContent>
+      <Footer />
     </S.Container>
   );
 }

@@ -7,9 +7,17 @@ export const Container = styled.div`
 
   display: flex;
 
-  background: #020617;
+  flex-direction: column;
 
-  overflow-x: hidden;
+  background: #020617;
+`;
+
+export const PageContent = styled.div`
+  width: 100%;
+
+  display: flex;
+
+  flex: 1;
 `;
 
 export const Content = styled.div`
@@ -19,16 +27,10 @@ export const Content = styled.div`
   flex-direction: column;
 
   width: 100%;
-
-  min-width: 0;
 `;
 
 export const Main = styled.main`
   width: 100%;
-
-  max-width: 1800px;
-
-  margin: 0 auto;
 
   padding: 24px;
 
@@ -113,14 +115,6 @@ export const Actions = styled.div`
     &:focus {
       border-color: rgba(239, 68, 68, 0.35);
     }
-
-    @media (max-width: 768px) {
-      width: 100%;
-    }
-  }
-
-  @media (max-width: 768px) {
-    width: 100%;
   }
 `;
 
@@ -169,9 +163,7 @@ export const Loading = styled.div`
   height: 300px;
 
   display: flex;
-
   align-items: center;
-
   justify-content: center;
 
   color: #94a3b8;
@@ -183,11 +175,21 @@ export const Loading = styled.div`
 export const CarsGrid = styled.div`
   display: grid;
 
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(4, 1fr);
 
   gap: 22px;
 
-  width: 100%;
+  @media (max-width: 1600px) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  @media (max-width: 1100px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 `;
 
 export const Card = styled.div`
@@ -199,13 +201,9 @@ export const Card = styled.div`
 
   border: 1px solid rgba(255, 255, 255, 0.04);
 
-  transition:
-    transform 0.25s,
-    border-color 0.25s;
+  transition: 0.25s;
 
   cursor: pointer;
-
-  min-width: 0;
 
   &:hover {
     transform: translateY(-4px);
@@ -223,20 +221,12 @@ export const Image = styled.div`
 
   overflow: hidden;
 
-  background: #111827;
-
   img {
     width: 100%;
 
     height: 100%;
 
     object-fit: cover;
-
-    transition: transform 0.3s;
-  }
-
-  &:hover img {
-    transform: scale(1.04);
   }
 
   button {
@@ -257,16 +247,12 @@ export const Image = styled.div`
     color: white;
 
     display: flex;
-
     align-items: center;
-
     justify-content: center;
 
     cursor: pointer;
 
     transition: 0.2s;
-
-    z-index: 2;
 
     &:hover {
       background: #ef4444;
@@ -290,12 +276,6 @@ export const Info = styled.div`
     font-weight: 700;
 
     line-height: 1.3;
-
-    overflow: hidden;
-
-    text-overflow: ellipsis;
-
-    white-space: nowrap;
   }
 
   span {
@@ -320,15 +300,11 @@ export const Footer = styled.div`
 
   gap: 14px;
 
-  flex-wrap: wrap;
-
   h3 {
     color: white;
 
     font-size: 26px;
     font-weight: 800;
-
-    line-height: 1;
   }
 
   small {
@@ -361,13 +337,13 @@ export const Pagination = styled.div`
   flex-wrap: wrap;
 
   button {
-    min-width: 44px;
+    min-width: 48px;
 
-    height: 44px;
+    height: 48px;
 
-    padding: 0 16px;
+    padding: 0 18px;
 
-    border-radius: 12px;
+    border-radius: 14px;
 
     border: 1px solid rgba(255, 255, 255, 0.06);
 
@@ -375,27 +351,29 @@ export const Pagination = styled.div`
 
     color: white;
 
+    font-size: 14px;
+    font-weight: 600;
+
     cursor: pointer;
 
     transition: 0.2s;
 
-    font-size: 14px;
-    font-weight: 600;
-
     &:hover {
-      background: rgba(239, 68, 68, 0.15);
-    }
+      border-color: rgba(239, 68, 68, 0.2);
 
-    &.active {
-      background: #ef4444;
-
-      border-color: #ef4444;
+      background: rgba(239, 68, 68, 0.08);
     }
 
     &:disabled {
       opacity: 0.4;
 
       cursor: not-allowed;
+    }
+
+    &.active {
+      background: linear-gradient(90deg, #ef4444 0%, #dc2626 100%);
+
+      border-color: transparent;
     }
   }
 `;
